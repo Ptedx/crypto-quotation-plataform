@@ -14,7 +14,7 @@ export const graphStyles = StyleSheet.create({
         },
         title:{
             fontSize: 40,
-            color: '#A6C5FF',
+            color: '#00FFAA',
             fontWeight: 'bold',
         }    
 })

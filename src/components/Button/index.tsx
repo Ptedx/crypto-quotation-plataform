@@ -17,7 +17,7 @@ export function Btn({content, action}:btnProps){
 
 const btnStyles= StyleSheet.create({
     btn:{
-        backgroundColor:'#3C4D80',
+        backgroundColor:'#00FFAA',
         borderRadius: 16,
         marginTop:10,
         marginBottom: 20,
@@ -29,7 +29,7 @@ const btnStyles= StyleSheet.create({
         width:'80%',
     },
     text:{
-        color:'#FFFFFF',
+        color:'green',
         fontSize:20,
         fontWeight: 'bold',
         textAlign: 'center',

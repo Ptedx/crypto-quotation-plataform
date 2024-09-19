@@ -3,7 +3,7 @@ import { View, Image } from "react-native";
 
 export function BottomBlur(){
     return(
-        <View style={styles.bottom_square}>
+        <View style={[styles.bottom_square,{opacity: 0.8}]}>
                 <Image 
                 source={require('../../img/blur_blue.png')}
                 resizeMode="contain"
@@ -21,7 +21,7 @@ export function TopBlur({image}:topProp){
     return(
         <View style={styles.top_square}>
                 <Image 
-                source={image? image : require('../../img/pink_blur.png')}
+                source={image? image : require('../../img/green_blur.png')}
                 resizeMode="contain"
                 style={{width: "100%"}}
                 />
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         width:500,
         height:500,
         position: 'absolute',
-        top: -250,
-        right: -250,
+        top: -225,
+        right: -225,
     },
 })

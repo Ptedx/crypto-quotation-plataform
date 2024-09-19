@@ -5,6 +5,6 @@ export type rootTypes={
     Main: undefined,
     Login: undefined,
     Register: undefined,
-    Details: {coinId: string,coinName:string,coinImage:number, coinPercentage:number},
+    Details: {coinId: string,coinName:string,coinImage:number},
     Loading: undefined,
 }

@@ -48,7 +48,7 @@ export default function Routes() {
                 <Stack.Screen 
                 name='MainTabs' 
                 component={MainPage} 
-                options={{ headerShown: false}
+                options={{ headerShown: false, headerTitle:''}
                   
                 }
                 />  

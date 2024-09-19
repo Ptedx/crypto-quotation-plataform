@@ -11,10 +11,10 @@ export function Hello({navigation}:navigationProps){
     return(
         <View style={contactStyles.contianer}>
             <BottomBlur />
-            <TopBlur />
+            <TopBlur/>
             <View style={contactStyles.img} >
                 <Image 
-                source={require('../../img/coins-main.png')}
+                source={require('../../img/allcoins_main.png')}
                 resizeMode="contain"
                 style={{width: "100%"}}
                 />
@@ -29,10 +29,10 @@ export function Hello({navigation}:navigationProps){
                 </Text>
 
                 <TouchableOpacity style={contactStyles.btn} onPress={()=>navigation.navigate('Login')}>
-                    <Text style={contactStyles.text}>
+                    <Text style={[contactStyles.text,{color:'#00FFAA'}]}>
                     ACOMPANHAR AGORA
                     </Text>
-                    <Image source={require('../../img/arrow-right.png')} resizeMode="contain"
+                    <Image source={require('../../img/green-arrow.png')} resizeMode="contain"
                     style={{width:30}}/>
                 </TouchableOpacity>
             </View>

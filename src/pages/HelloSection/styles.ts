@@ -28,7 +28,7 @@ export const contactStyles = StyleSheet.create({
         right: -250,
     },
     title:{
-        color:'#A6C5FF',
+        color:'#FFFFFF',
         textAlign:'center',
         fontSize:44,
         marginTop: -30,
@@ -36,12 +36,12 @@ export const contactStyles = StyleSheet.create({
         fontWeight: 'bold',
     },
     text:{
-        color:'#3C4D80',
+        color:'#B0B0B0',
         fontSize:16,
         fontWeight: 'bold',
     },
     btn:{
-        backgroundColor:'#A6C5FF',
+        backgroundColor:'#000000',
         borderRadius: 16,
         marginTop: 60,
         marginBottom: 20,
@@ -49,5 +49,8 @@ export const contactStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'space-between',
         paddingHorizontal:15,
+        borderColor:'#00FFAA',
+        borderWidth: 3
+        
     },
 })

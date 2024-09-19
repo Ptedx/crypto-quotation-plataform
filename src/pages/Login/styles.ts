@@ -16,20 +16,22 @@ export const infoStyles = StyleSheet.create({
         alignItems: 'center',
     },
     input:{
-        backgroundColor: '#A6C5FF',
+        backgroundColor: '#333333',
         width: '80%',
         borderRadius: 12,
-        padding:10,
+        padding:15,
+        paddingVertical: 20,
         marginBottom: 20,
+        color: 'white'
     },
     text:{
-        color:'white',
+        color:'#B0B0B0',
         fontWeight: 'bold',
         fontSize: 16,
     },
     title:{
         marginBottom: 5,
         fontSize:30,
-        color:'#A6C5FF',
+        color:'#FFFFFF',
     }
 })

@@ -6,6 +6,8 @@ import 'dotenv/config'
 import User from './src/models/user'
 import bycrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import axios from 'axios'
+import { CryptoData } from './src/models/cyptoInfos'
 
 const app = express()
 app.use(bodyParser.json())
@@ -29,27 +31,134 @@ async function comparePasswords(password, hashedPassword){
     return bycrypt.compare(password, hashedPassword)
 }
 
-async function getCoinInfos(coinId){
-    const response = await axios.get(
-        `https://coingecko.p.rapidapi.com/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&sparkline=true`,
-        {
-          headers:{
-            'x-rapidapi-host': 'coingecko.p.rapidapi.com',
-            'x-rapidapi-key': 'c5445751b2msh2e0b3b82db53c50p1661bejsnf0d23522991d'
-          }
-        });
-    
-    return response.data.market_data.current_price.usd
+
+async function getCoinInfos(coin){
+        try{
+            const response = await axios.get(
+                `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`,
+                {
+                  headers:{
+                    'x-cg-demo-api-key': process.env.COIN_API_KEY
+                  }
+                });
+                return response.data
+        }catch(err){
+            console.log('Deu errinho: '+err)
+        }
+}
+
+async function getChartInfos(coin){
+        try{
+            const response = await axios.get(
+                `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=180&interval=daily&precision=6`,
+                {
+                  headers:{
+                    'x-cg-demo-api-key': process.env.COIN_API_KEY
+                  }
+                });
+                return response.data.prices
+        }catch(err){
+            console.log('Deu errinho: '+err)
+        }
+}
+
+async function getAllCoinInfos(){
+    const fiveMinutes = 5*60*1000
+    const last_update = await CryptoData.find({symbol:'btc'})
+    const now = new Date()
+    if((now.getTime() - last_update[0].last_update.getTime()) >= fiveMinutes){
+        try{
+                        const response = await axios.get(
+                            'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&sparkline=true&precision=4',
+                            {
+                              headers:{
+                                'x-cg-demo-api-key': process.env.COIN_API_KEY
+                              }
+                            });
+                            const operations = response.data.map(item => ({
+                                updateOne: {
+                                    filter: { symbol: item.symbol },  // Filtro para identificar o documento
+                                    update: {
+                                        $set: {
+                                            id: item.id,
+                                            symbol: item.symbol,
+                                            max_supply: item.max_supply,
+                                            image: item.image,
+                                            name: item.name,
+                                            market_cap: item.market_cap,
+                                            market_cap_24h: item.market_cap_change_24h,
+                                            market_cap_rank: item.market_cap_rank,
+                                            market_cap_percentage_24h: item.market_cap_change_percentage_24h,
+                                            total_volume: item.total_volume,
+                                            current_price: item.current_price,
+                                            price_24h: item.price_change_24h,
+                                            price_percentage_24h: item.price_change_percentage_24h,
+                                            circulating_supply: item.circulating_supply,
+                                            last_update: now,
+                                            sparkline_in_7d: item.sparkline_in_7d.price,
+                                        }
+                                    },
+                                    upsert: true
+                                }
+                            }))
+            
+                        const result = await CryptoData.bulkWrite(operations)
+                        console.log('Dados inseridos com sucesso!')
+                        const resultDB = await CryptoData.find({})
+                        return resultDB
+                    }catch(err){
+                        console.log('Deu errinho: '+err)
+                    }
+    }else{
+        try{
+            const result = await CryptoData.find({})
+            console.log('Apenas busquei do banco!')
+            return result
+        }catch(err){
+            return console.log('Erro ao buscar as informações do banco', err)
+        }
+
+    }
 }
 
 //Routes
+app.get('/coins',async (req,res)=>{
+    try{
+        const infos = await getAllCoinInfos()
+        console.log('Fui chamado!')
+        return res.status(200).send(infos)
+    }catch(err){
+        return res.status(404).send({message: `Deu erro na busca: ${err}`})
+    }
+})
+
+app.get('/coins/:coin',async (req,res)=>{
+    const coin = req.params.coin
+    try{
+        const infos = await getCoinInfos(coin)
+        return res.status(200).send(infos)
+    }catch(err){
+        return res.status(404).send({message: err})
+    }
+})
+
+app.get('/charts/:coin',async (req,res)=>{
+    const coin = req.params.coin
+    try{
+        const infos = await getChartInfos(coin)
+        return res.status(200).send(infos)
+    }catch(err){
+        return res.status(404).send({message: err})
+    }
+})
+
 app.post('/login', async (req, res)=>{
     const {email, password} = req.body
     const user = await User.findOne({email})
     const auth = await comparePasswords(password, user.password)
     if(user){
         if(auth){
-            const token = jwt.sign({id: user.id, name: user.name},process.env.API_KEY,{expiresIn: process.env.JWT_EXP})
+            const token = jwt.sign({id: user.id, name: user.name},process.env.API_KEY)
             return res.status(200).json({message: 'Usuário Logado!', token: token, name: user.name})
         }
         return res.status(401).json({message: 'Usuário e/ou Senha incorretos'})
@@ -58,7 +167,7 @@ app.post('/login', async (req, res)=>{
 })
 
 app.post('/register',async (req, res)=>{
-    const {name , email, password} = req.body
+    const {email, password} = req.body
     try{
         const user = new User(req.body)
         const userFind = await User.findOne({email})

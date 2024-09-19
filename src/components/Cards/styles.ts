@@ -4,8 +4,8 @@ export const cardStyles = StyleSheet.create({
     // Estilos para cada elemento do card
     card: {
       alignItems: 'center',
+      gap:20,
       paddingHorizontal: 20,
-      height: 150,
       width: 300,
       marginBottom: 10,
       backgroundColor: '#1e1e1e',
@@ -16,12 +16,12 @@ export const cardStyles = StyleSheet.create({
         marginTop: 20,
         flexDirection:'row',
         gap: 12,
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         alignItems: 'center',
         width:'100%',
     },
     currency: {
-      color: '#A6C5FF',
+      color: '#00FFAA',
       fontSize: 18,
       fontWeight: 'bold'
     },
@@ -32,8 +32,8 @@ export const cardStyles = StyleSheet.create({
     },
     priceInfos:{
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
+        alignItems:'center',
+        gap:10,
     },
     change: {
       color: '#fff',

@@ -8,26 +8,44 @@ import { CryptoCard } from "../../components/Cards"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { rootTypes } from "../../types/types"
 import { TopBlur } from "../../components/background_blur"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { CoinsData } from "../../models/cyptoInfos"
+import { LoadingComponent } from "../../components/loadingComponent"
 
 export type navigatorProps = NativeStackScreenProps<rootTypes,'MainTabs'>
 
-export function MainPage({navigation, route}:navigatorProps){
+export function MainPage({navigation, route}:navigatorProps){    
     const name = route.params?.name
+    const [data, setData] = useState<CoinsData | null>(null)
+    const [loaded, setLoaded] = useState<boolean>(false)
 
+    useEffect(()=>{
+        async function getInfos(){
+            try{
+                const response = await axios.get(`http://10.0.0.196:3002/coins`)
+                setData(response.data)
+                setLoaded(true)
+            }catch(err){
+                console.log('Erro ao buscar moedas: ',err)
+            }
+        } 
+        getInfos()
+    },[])
+    if(!loaded){
+        return <LoadingComponent />
+    }
     return(
         <SafeAreaView style={mainStyles.contianer}>
                 <View style={mainStyles.contianer}>
-                    <TopBlur image={require('../../img/blur_blue.png')}/>
-                    <Menu name={name!} />
+                    <TopBlur />
+                    <Menu navigation={navigation} name={name!} />
                     <Balance />
-                    <ScrollView horizontal>
-                        <CryptoCard currency="BTC" price="$ 254.54" change={3} />
-                        <CryptoCard currency="USD" price="$ 232.25" change={-1} />
-                        <CryptoCard currency="ETH" price="$ 5832.25" change={12} />
-                        <CryptoCard currency="DOGE" price="$ 338.85" change={34} />
-                    </ScrollView>
+                    {/* <ScrollView horizontal> */}
+                        <CryptoCard dataApi={data!} />
+                    {/* </ScrollView> */}
                 </View>
-            <History navigation={navigation}/>
+            <History navigation={navigation} dataAPI={data!}/>
         </SafeAreaView>
     )
 }

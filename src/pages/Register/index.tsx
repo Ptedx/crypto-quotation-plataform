@@ -70,15 +70,15 @@ export function Register({navigation}: navigationProps){
     }
 
     return(
-        <View style={infoStyles.contianer}>
+        <View style={[infoStyles.contianer,{marginTop:-30}]}>
             <BottomBlur />
             <TopBlur />
             <ScrollView style={{width: '100%'}}>
                 <View style={infoStyles.loginArea}>
                     <Image 
-                        source={require('../../img/coins-main.png')}
+                        source={require('../../img/allcoins_main.png')}
                         resizeMode="contain"
-                        style={{width: 150, height:150,marginVertical: 20}}
+                        style={{width: 200, height:200,marginVertical: 20}}
                     />
                     <Text style={StyleSheet.compose(infoStyles.text, infoStyles.title)}>
                         JUNTE-SE À ALL COINS
@@ -92,6 +92,7 @@ export function Register({navigation}: navigationProps){
                     <TextInput 
                         style={infoStyles.input} 
                         placeholder="Nome" 
+                        placeholderTextColor={"#B0B0B0"}  
                         value={name}
                         onChange={(item)=>setName(item.nativeEvent.text)}
                     />
@@ -100,7 +101,8 @@ export function Register({navigation}: navigationProps){
                     </Text>
                     <TextInput 
                         style={infoStyles.input} 
-                        placeholder="Email" 
+                        placeholder="Email"
+                        placeholderTextColor={"#B0B0B0"}   
                         value={email}
                         onChange={(item)=>setEmail(item.nativeEvent.text)}
                     />
@@ -110,18 +112,19 @@ export function Register({navigation}: navigationProps){
                     <TextInput 
                         style={infoStyles.input} 
                         placeholder="Senha" 
+                        placeholderTextColor={"#B0B0B0"}  
                         value={password}
                         onChange={(item)=>setPassword(item.nativeEvent.text)}
                         secureTextEntry={true}
                     />
                     <Btn content='REGISTRAR' action={validadeLogin} />
 
-                    <View style={{flexDirection:'row', marginTop: 60, marginBottom: 20}}>
+                    <View style={{flexDirection:'row', marginTop: 20, marginBottom: 20}}>
                         <Text style={infoStyles.text}>
                             Já possui uma conta?
                         </Text>
                         <TouchableOpacity onPress={()=>goLogin()}>
-                            <Text style={StyleSheet.compose(infoStyles.text, {color: '#3C4D80'})}> Logar-se</Text>
+                            <Text style={StyleSheet.compose(infoStyles.text, {color: 'green'})}> Logar-se</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

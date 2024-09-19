@@ -33,7 +33,7 @@ export function Login({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('http://192.168.15.116:3002/login',{
+            const response = await axios.post('http://10.0.0.196:3002/login',{
                 email: email,
                 password: password
             });
@@ -52,7 +52,6 @@ export function Login({navigation}: navigationProps){
             const res = await sendText()
             if (res?.status == 200){
                 resetFields()
-                console.log(res.data.name)
                 resetStack()
                 navigation.navigate('MainTabs',{name: res.data.name})
 
@@ -75,9 +74,9 @@ export function Login({navigation}: navigationProps){
                 <ScrollView style={{width: '100%'}}>
                     <View style={infoStyles.loginArea}>
                         <Image 
-                            source={require('../../img/coins-main.png')}
+                            source={require('../../img/allcoins_main.png')}
                             resizeMode="contain"
-                            style={{width: 150, height:150,marginVertical: 20}}
+                            style={{width: 200, height:200,marginVertical: 20}}
                         />
                         <Text style={StyleSheet.compose(infoStyles.text, infoStyles.title)}>
                             Bem vindo de volta!
@@ -91,7 +90,8 @@ export function Login({navigation}: navigationProps){
                         </Text>
                         <TextInput 
                             style={infoStyles.input} 
-                            placeholder="Email" 
+                            placeholder="Email"
+                            placeholderTextColor={"#B0B0B0"} 
                             value={email}
                             onChange={(item)=>setEmail(item.nativeEvent.text)}
                         />
@@ -100,7 +100,8 @@ export function Login({navigation}: navigationProps){
                         </Text>
                         <TextInput 
                             style={infoStyles.input} 
-                            placeholder="Senha" 
+                            placeholder="Senha"
+                            placeholderTextColor={"#B0B0B0"}  
                             value={password}
                             onChange={(item)=>setPassword(item.nativeEvent.text)}
                             secureTextEntry={true}
@@ -108,12 +109,12 @@ export function Login({navigation}: navigationProps){
                     
                         <Btn content='LOGAR' action={validadeLogin} />
 
-                        <View style={{flexDirection:'row', marginTop: 80, marginBottom: 20}}>
+                        <View style={{flexDirection:'row', marginTop: 40, marginBottom: 20}}>
                             <Text style={infoStyles.text}>
                                 Não possui uma conta ainda?
                             </Text>
                             <TouchableOpacity onPress={()=>goRegister()}>
-                                <Text style={StyleSheet.compose(infoStyles.text, {color: '#3C4D80'})}> Registrar-se</Text>
+                                <Text style={StyleSheet.compose(infoStyles.text, {color: 'green'})}> Registrar-se</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

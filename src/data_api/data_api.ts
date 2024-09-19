@@ -108,7 +108,7 @@ export const data_api:dataProps[]=[
         {
             id: 13,
             coinName: 'Bitcoin Cash',
-            coinId: 'bitcoincash',
+            coinId: 'bitcoin-cash',
             price: 200,
             pricePercetage: -1.24,
             image: require('../img/coins/bitcoinCash.png')

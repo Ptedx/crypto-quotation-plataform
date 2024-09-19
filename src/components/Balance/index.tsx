@@ -1,6 +1,6 @@
-import { View, Text } from "react-native"
+import { View, Text, FlatList, ScrollView } from "react-native"
 import { graphStyles } from "./styles"
-
+import { coinsData } from "../../models/cyptoInfos"
 
 
 export function Balance(){

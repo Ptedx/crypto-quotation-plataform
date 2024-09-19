@@ -40,7 +40,7 @@ export function Loading({navigation}: nagivateProps){
     return(
         <View style={loadingStyles.container}>
             <Image 
-                source={require('../../img/coins-main.png')}
+                source={require('../../img/allcoins_main.png')}
                 resizeMode="contain"
                 style={{width: 150, height:150,marginVertical: 20}}
             />

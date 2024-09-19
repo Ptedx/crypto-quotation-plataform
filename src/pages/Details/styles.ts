@@ -19,23 +19,23 @@ export const detailStyles = StyleSheet.create({
         marginBottom: 20
     },
     text:{
-        color:'white',
+        color:'#B0B0B0',
         fontWeight: 'bold',
         fontSize: 18
     },
     up:{
-        color:'green',
+        color:'#32CD32',
         fontWeight: 'bold',
         paddingHorizontal:20,
     },
     down:{
-        color:'red',
+        color:'#FF5555',
         fontWeight: 'bold',
         paddingHorizontal:20,
     },
     title:{
         fontSize: 40,
-        color: '#A6C5FF',
+        color: 'white',
         fontWeight: 'bold',
     },
     graphic:{
@@ -48,7 +48,7 @@ export const detailStyles = StyleSheet.create({
         marginBottom:10,
     },
     btn:{
-        borderColor:'#3C4D80',
+        borderColor:'#00FFAA',
         paddingHorizontal:10,
         borderWidth: 1,
         borderRadius:12

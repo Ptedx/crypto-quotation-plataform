@@ -1,49 +1,60 @@
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, } from "react-native"
 import { histStyles } from "./styles"
-import { data_api } from "../../data_api/data_api"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { rootTypes } from "../../types/types";
+import { coinsData,CoinsData } from "../../models/cyptoInfos";
 
 type HistoryProps = {
-    navigation: NativeStackNavigationProp<rootTypes, 'MainTabs'>;
+    navigation: NativeStackNavigationProp<rootTypes, 'MainTabs'>
+    dataAPI: any
   };
 
-export function History({navigation}:HistoryProps){
+export function History({navigation, dataAPI}:HistoryProps){
+
+    function truncate(number:string){
+        const num = parseFloat(number)
+
+        if (num <= 1 && num >= -1){
+            return (num).toFixed(4)
+        }
+        return (num).toFixed(2)
+    }
 
     return(
         <View style={histStyles.contianer}>
-            <Text style={StyleSheet.compose(histStyles.text,{marginBottom:20, color:'#A6C5FF'})}>
+            <Text style={StyleSheet.compose(histStyles.text,{marginBottom:20, fontSize: 22})}>
                 MOST TRENDING COINS
             </Text>
 
             <FlatList 
                 style={{width: '95%'}}
-                data={data_api}
+                data={dataAPI}
                 renderItem={({item})=>(
                     <TouchableOpacity 
                         style={histStyles.item} 
                         onPress={()=>navigation.navigate('Details',
-                            {coinId: item.coinId, coinName:item.coinName, coinImage: item.image, coinPercentage: item.pricePercetage})}
+                            {coinId: item.id, coinName:item.name, coinImage: item.image})}
                     >
                         <View style={histStyles.coinRow}>
                             <Image 
-                                source={item.image}
-                                style={{width:50, height:50}}
+                                source={{uri: item.image}}
+                                style={{width:50, height:50, borderRadius:50}}
                             />
-                            <Text style={histStyles.text}>{item.coinName}</Text>
+                            <Text style={histStyles.text}>{(item.symbol).toUpperCase()}</Text>
                         </View>
+                        
                         <View style={histStyles.textRow}>
-                            <Text style={histStyles.text}>${item.price}</Text>
+                            <Text style={histStyles.text}>${truncate(item.current_price)}</Text>
                             <Text style={
                                 [histStyles.text,
-                                item.pricePercetage >= 0 ? histStyles.positive : histStyles.negative]}>
-                                {item.pricePercetage > 0? `+${item.pricePercetage}`:item.pricePercetage}%
-                                </Text>
-
+                                item.price_percentage_24h >= 0 ? histStyles.positive : histStyles.negative]}>
+                                {item.price_percentage_24h > 0? `+${truncate(item.price_percentage_24h)}`
+                                :truncate(item.price_percentage_24h)}%
+                            </Text>
                         </View>
                     </TouchableOpacity>
                     )}
-                keyExtractor={(item)=>item.coinName}
+                keyExtractor={(item)=>item.symbol}
                 showsVerticalScrollIndicator={false}
             />
         </View>

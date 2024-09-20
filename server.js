@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv/config');
 const User = require('./src/models/user');
-const bcrypt = require('bcryptjs');
+const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const { CryptoData } = require('./src/models/cyptoInfos');

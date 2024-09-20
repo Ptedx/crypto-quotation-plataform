@@ -32,6 +32,7 @@ export function MainPage({navigation, route}:navigatorProps){
         } 
         getInfos()
     },[])
+
     if(!loaded){
         return <LoadingComponent />
     }

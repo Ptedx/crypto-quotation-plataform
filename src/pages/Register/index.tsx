@@ -7,6 +7,7 @@ import { useState } from "react"
 import axios from "axios"
 import { CommonActions } from "@react-navigation/native"
 import { BottomBlur, TopBlur } from "../../components/background_blur"
+import * as SecureStorage from 'expo-secure-store'
 
 type navigationProps = NativeStackScreenProps<rootTypes, 'Register'>
 
@@ -33,12 +34,14 @@ export function Register({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('http://192.168.15.116:3002/register', {
+            const response = await axios.post('http://10.0.0.196:3002/register', {
                 name: name,
                 email: email,
                 password: password,
             });
+
             if(response.status == 201){
+                await SecureStorage.setItemAsync('AuthToken', JSON.stringify({token: response.data.token,name: name}))
                 return response.status
             }
             return response.data.message

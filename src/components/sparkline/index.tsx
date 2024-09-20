@@ -8,7 +8,7 @@ interface sparkProps{
 export function Sparkline({dataAPI}: sparkProps){
 
     const width= '100%'
-    const height = 100
+    const height = 80
 
     const formatedData = dataAPI.map((item,index)=>([index, item] as [number,number]))
 
@@ -28,8 +28,8 @@ export function Sparkline({dataAPI}: sparkProps){
     const pathLine = lineGenerator(formatedData)
 
     return(
-        <View style={{ width:'100%'}}>
-            <Svg width={'100%'} height={90}>
+        <View style={{ width:'100%', paddingBottom:20}}>
+            <Svg width={'100%'} height={height}>
                 <Path d={pathLine!} stroke={'#00ffaa'} fill={'none'} strokeWidth={2}/>
             </Svg>
         </View>

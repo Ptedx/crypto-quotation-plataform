@@ -67,9 +67,11 @@ export function Details({navigation, route}:navigationProps){
                             :`${formatCurrency(coinData.market_data.price_change_24h)} (${(coinData.market_data.price_change_percentage_24h).toFixed(2)}%)`}
                         </Text>
                     </View>
-                    <Image source={coinImage}
-                        style={{width:50, height: 50}}
+                    <Image 
+                        source={{uri: `${coinImage}`}}
+                        style={{width:50, height:50, borderRadius:50}}
                     />
+
                 </View>
                 
                 <Graphic 

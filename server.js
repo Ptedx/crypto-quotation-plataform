@@ -1,13 +1,14 @@
-import express from 'express'
-import http from 'http'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import 'dotenv/config'
-import User from './src/models/user'
-import bycrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import axios from 'axios'
-import { CryptoData } from './src/models/cyptoInfos'
+const express = require('express');
+const http = require('http');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+require('dotenv/config');
+const User = require('./src/models/user');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const axios = require('axios');
+const { CryptoData } = require('./src/models/cyptoInfos');
+
 
 const app = express()
 app.use(bodyParser.json())
@@ -158,7 +159,7 @@ app.post('/login', async (req, res)=>{
     const auth = await comparePasswords(password, user.password)
     if(user){
         if(auth){
-            const token = jwt.sign({id: user.id, name: user.name},process.env.API_KEY)
+            const token = jwt.sign({id: user.email, name: user.name},process.env.API_KEY)
             return res.status(200).json({message: 'Usuário Logado!', token: token, name: user.name})
         }
         return res.status(401).json({message: 'Usuário e/ou Senha incorretos'})
@@ -167,14 +168,15 @@ app.post('/login', async (req, res)=>{
 })
 
 app.post('/register',async (req, res)=>{
-    const {email, password} = req.body
+    const {email, password,name} = req.body
     try{
         const user = new User(req.body)
         const userFind = await User.findOne({email})
         if(!userFind){
             user.password = await hashPassword(password)
             await user.save()
-            return res.status(201).json({message:'Usuário salvo com sucesso!'})
+            const token = jwt.sign({id: email, name: name},process.env.API_KEY)
+            return res.status(201).json({message:'Usuário salvo com sucesso!', token: token})
         }else{
             return res.status(401).json({message: 'Erro: Usuário já cadastrado'})
         }

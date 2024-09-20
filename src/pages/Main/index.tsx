@@ -41,9 +41,7 @@ export function MainPage({navigation, route}:navigatorProps){
                     <TopBlur />
                     <Menu navigation={navigation} name={name!} />
                     <Balance />
-                    {/* <ScrollView horizontal> */}
                         <CryptoCard dataApi={data!} />
-                    {/* </ScrollView> */}
                 </View>
             <History navigation={navigation} dataAPI={data!}/>
         </SafeAreaView>

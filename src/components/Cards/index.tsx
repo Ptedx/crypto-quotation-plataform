@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, ScrollView } from 'react-native';
+import { View, Text, Image, FlatList } from 'react-native';
 import { cardStyles } from './styles';
 import { coinsData } from '../../models/cyptoInfos';
 import { Sparkline } from '../sparkline';
@@ -20,7 +20,6 @@ export function CryptoCard({ dataApi }:CryptoData){
             horizontal
             renderItem={({item})=>(
                     <View style={cardStyles.card}>
-
                       
                         <View style={cardStyles.currencyInfos}>
                           <View style={cardStyles.priceInfos}>
@@ -43,11 +42,43 @@ export function CryptoCard({ dataApi }:CryptoData){
                       </View>
                       <Sparkline dataAPI={item.sparkline_in_7d}/>
 
-                     
                   </View>
 
             )}
       />
+
+      // <Carousel
+      //       width={300}
+      //       height={150}
+      //       data={topTrending}
+      //       loop={true}
+      //       renderItem={({item})=>(
+      //               <View style={cardStyles.card}>
+                      
+      //                   <View style={cardStyles.currencyInfos}>
+      //                     <View style={cardStyles.priceInfos}>
+      //                       <Image 
+      //                           source={{uri: item.image}}
+      //                           style={{width:40, height: 40, borderRadius: 50}}
+      //                       />
+
+      //                       <Text style={cardStyles.currency}>{item.symbol.toUpperCase()}</Text>
+      //                     </View>
+
+      //                       <View style={cardStyles.priceInfos}>
+      //                         <Text style={cardStyles.price}>${truncate(item.current_price)}</Text>
+      //                           <Text style={[cardStyles.change, parseFloat(item.price_percentage_24h) > 0 ? 
+      //                             cardStyles.positiveChange : cardStyles.negativeChange]}>
+      //                             {truncate(item.price_percentage_24h)}%
+      //                         </Text> 
+      //                       </View>
+
+      //                 </View>
+      //                 <Sparkline dataAPI={item.sparkline_in_7d}/>
+
+      //             </View>
+      //       )}
+      // />
     )
 }
   /**/

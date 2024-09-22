@@ -32,7 +32,6 @@ async function comparePasswords(password, hashedPassword){
     return bycrypt.compare(password, hashedPassword)
 }
 
-
 async function getCoinInfos(coin){
         try{
             const response = await axios.get(
@@ -78,7 +77,7 @@ async function getAllCoinInfos(){
                             });
                             const operations = response.data.map(item => ({
                                 updateOne: {
-                                    filter: { symbol: item.symbol },  // Filtro para identificar o documento
+                                    filter: { symbol: item.symbol },
                                     update: {
                                         $set: {
                                             id: item.id,
@@ -87,16 +86,16 @@ async function getAllCoinInfos(){
                                             image: item.image,
                                             name: item.name,
                                             market_cap: item.market_cap,
-                                            market_cap_24h: item.market_cap_change_24h,
+                                            market_cap_change_24h: item.market_cap_change_24h,
                                             market_cap_rank: item.market_cap_rank,
-                                            market_cap_percentage_24h: item.market_cap_change_percentage_24h,
+                                            market_cap_change_percentage_24h: item.market_cap_change_percentage_24h,
                                             total_volume: item.total_volume,
                                             current_price: item.current_price,
-                                            price_24h: item.price_change_24h,
-                                            price_percentage_24h: item.price_change_percentage_24h,
+                                            price_change_24h: item.price_change_24h,
+                                            price_change_percentage_24h: item.price_change_percentage_24h,
                                             circulating_supply: item.circulating_supply,
                                             last_update: now,
-                                            sparkline_in_7d: item.sparkline_in_7d.price,
+                                            sparkline_in_7d: item.sparkline_in_7d,
                                         }
                                     },
                                     upsert: true
@@ -104,16 +103,13 @@ async function getAllCoinInfos(){
                             }))
             
                         const result = await CryptoData.bulkWrite(operations)
-                        console.log('Dados inseridos com sucesso!')
-                        const resultDB = await CryptoData.find({})
-                        return resultDB
+                        return response.data
                     }catch(err){
-                        console.log('Deu errinho: '+err)
+                        console.log('Erro ao buscar informações das criptomoedas: '+err)
                     }
     }else{
         try{
             const result = await CryptoData.find({})
-            console.log('Apenas busquei do banco!')
             return result
         }catch(err){
             return console.log('Erro ao buscar as informações do banco', err)
@@ -126,7 +122,6 @@ async function getAllCoinInfos(){
 app.get('/coins',async (req,res)=>{
     try{
         const infos = await getAllCoinInfos()
-        console.log('Fui chamado!')
         return res.status(200).send(infos)
     }catch(err){
         return res.status(404).send({message: `Deu erro na busca: ${err}`})

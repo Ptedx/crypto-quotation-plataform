@@ -23,7 +23,7 @@ export function MainPage({navigation, route}:navigatorProps){
     useEffect(()=>{
         async function getInfos(){
             try{
-                const response = await axios.get(`http://10.0.0.196:3002/coins`)
+                const response = await axios.get(`http://192.168.15.116:3002/coins`)
                 setData(response.data)
                 setLoaded(true)
             }catch(err){
@@ -32,7 +32,6 @@ export function MainPage({navigation, route}:navigatorProps){
         } 
         getInfos()
     },[])
-
     if(!loaded){
         return <LoadingComponent />
     }

@@ -1,3 +1,5 @@
+import { coinsData } from "../models/cyptoInfos";
+
 export type rootTypes={
     HelloSection: undefined,
     Discover: undefined,
@@ -5,6 +7,6 @@ export type rootTypes={
     Main: undefined,
     Login: undefined,
     Register: undefined,
-    Details: {coinId: string,coinName:string,coinImage:number},
+    Details: {data: coinsData},
     Loading: undefined,
 }

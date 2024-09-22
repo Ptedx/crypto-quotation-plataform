@@ -3,20 +3,22 @@ import mongoose,{Document, Schema} from "mongoose";
 export interface coinsData{
   symbol:string,
   id: string,
-  max_supply: string,
   image:string,
   name:string
-  market_cap:string,
-  market_cap_24h:string,
-  market_cap_rank:string,
-  market_cap_percentage_24h:string,
-  total_volume:string,
-  current_price:string,
-  price_24h:string,
-  price_percentage_24h:string,
-  circulating_supply:string,
+  max_supply: number,
+  market_cap:number,
+  market_cap_change_24h:number,
+  market_cap_rank:number,
+  market_cap_change_percentage_24h:number,
+  total_volume:number,
+  current_price:number,
+  price_change_24h: number,
+  price_change_percentage_24h:number,
+  circulating_supply:number,
   last_update: Date,
-  sparkline_in_7d: number[]
+  sparkline_in_7d: {
+    price:number[]
+  },
 }
 
 export type CoinsData = coinsData[]
@@ -24,19 +26,21 @@ export type CoinsData = coinsData[]
 const CryptosData = new Schema<coinsData>({
   id: {type: String, required: true},
   symbol: {type: String, required: true},
-  max_supply: String,
   image:String,
   name: String,
-  market_cap:String,
-  market_cap_24h:String,
-  market_cap_rank:String,
-  market_cap_percentage_24h:String,
-  total_volume:String,
-  current_price:String,
-  price_24h:String,
-  price_percentage_24h:String,
-  circulating_supply:String,
-  sparkline_in_7d: [Number],
+  max_supply: Number,
+  market_cap:Number,
+  market_cap_change_24h:Number,
+  market_cap_rank:Number,
+  market_cap_change_percentage_24h:Number,
+  total_volume:Number,
+  current_price:Number,
+  price_change_24h:Number,
+  price_change_percentage_24h:Number,
+  circulating_supply:Number,
+  sparkline_in_7d: {
+    price:[Number]
+  },
   last_update: {type: Date, default: Date.now}
 })
 

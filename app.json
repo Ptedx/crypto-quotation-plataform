@@ -1,30 +1,36 @@
 {
   "expo": {
-    "name": "navigation-project",
+    "name": "AllCoins",
     "slug": "navigation-project",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/allcoins_icon.png",
+    "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/allcoins_splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
-      "config":{
+      "config": {
         "usesNonExemptEncyption": false
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/allcoins_icon.png",
+        "backgroundColor": "#000"
+      },
+      "package": "com.vinicosta37.navigationproject"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "705bd66f-f24f-4648-96e3-9ff2a4e36416"
+      }
     }
   }
 }

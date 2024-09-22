@@ -33,7 +33,7 @@ export function Login({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('http://10.0.0.196:3002/login',{
+            const response = await axios.post('https://crypto-quotation-plataform.onrender.com/login',{
                 email: email,
                 password: password
             });

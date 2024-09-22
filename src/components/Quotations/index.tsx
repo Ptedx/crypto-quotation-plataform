@@ -2,7 +2,6 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, } from "reac
 import { histStyles } from "./styles"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { rootTypes } from "../../types/types";
-import { coinsData,CoinsData } from "../../models/cyptoInfos";
 
 type HistoryProps = {
     navigation: NativeStackNavigationProp<rootTypes, 'MainTabs'>
@@ -14,6 +13,9 @@ export function History({navigation, dataAPI}:HistoryProps){
     function truncate(number:string){
         const num = parseFloat(number)
 
+        if(num > -0.0001 && num < 0.0001){
+            return (num).toFixed(7)
+        }
         if (num <= 1 && num >= -1){
             return (num).toFixed(4)
         }
@@ -22,7 +24,7 @@ export function History({navigation, dataAPI}:HistoryProps){
 
     return(
         <View style={histStyles.contianer}>
-            <Text style={StyleSheet.compose(histStyles.text,{marginBottom:20, fontSize: 22})}>
+            <Text style={StyleSheet.compose(histStyles.text,{marginBottom:20, fontSize: 18})}>
                 MOST TRENDING COINS
             </Text>
 
@@ -33,7 +35,7 @@ export function History({navigation, dataAPI}:HistoryProps){
                     <TouchableOpacity 
                         style={histStyles.item} 
                         onPress={()=>navigation.navigate('Details',
-                            {coinId: item.id, coinName:item.name, coinImage: item.image})}
+                            {data: item})}
                     >
                         <View style={histStyles.coinRow}>
                             <Image 
@@ -47,14 +49,14 @@ export function History({navigation, dataAPI}:HistoryProps){
                             <Text style={histStyles.text}>${truncate(item.current_price)}</Text>
                             <Text style={
                                 [histStyles.text,
-                                item.price_percentage_24h >= 0 ? histStyles.positive : histStyles.negative]}>
-                                {item.price_percentage_24h > 0? `+${truncate(item.price_percentage_24h)}`
-                                :truncate(item.price_percentage_24h)}%
+                                item.price_change_percentage_24h >= 0 ? histStyles.positive : histStyles.negative]}>
+                                {item.price_change_percentage_24h > 0? `+${truncate(item.price_change_percentage_24h)}`
+                                :truncate(item.price_change_percentage_24h)}%
                             </Text>
                         </View>
                     </TouchableOpacity>
                     )}
-                keyExtractor={(item)=>item.symbol}
+                keyExtractor={(item)=>item.id}
                 showsVerticalScrollIndicator={false}
             />
         </View>

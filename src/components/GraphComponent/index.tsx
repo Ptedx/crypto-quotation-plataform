@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { View, Dimensions } from 'react-native'
 import {Svg, Path, Defs, LinearGradient, Stop} from 'react-native-svg'
 import axios from 'axios'
+import { LoadingComponent } from '../loadingComponent'
 
 type dataProps = [number, number][]
 
@@ -10,12 +11,14 @@ type dataProps = [number, number][]
 export function Graphic({coinId, days}:{coinId:string,days:number}){
   const [coinData, setCoinData] = useState<dataProps>([])
   const [dataPeriod, setDataPeriod] = useState<dataProps>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   useEffect(()=>{
     async function getPrices(){
       try{
-        const response = await axios.get(`http://10.0.0.196:3002/charts/${coinId}`)
+        const response = await axios.get(`http://192.168.15.116:3002/charts/${coinId}`)
         setCoinData(response.data)
         setDataPeriod(response.data.slice(0,180))
+        setIsLoading(false)
       }catch(err){
         console.log('Erro no gráfico: ',err)
       }
@@ -62,6 +65,9 @@ export function Graphic({coinId, days}:{coinId:string,days:number}){
 
   const patharea = areaGenerator(dataPeriod)
 
+  if(isLoading){
+    return <LoadingComponent />
+  }
 
   return(
     <View style={{ width:'95%'}}>

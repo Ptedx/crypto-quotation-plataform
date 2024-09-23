@@ -32,21 +32,6 @@ async function comparePasswords(password, hashedPassword){
     return bycrypt.compare(password, hashedPassword)
 }
 
-async function getCoinInfos(coin){
-        try{
-            const response = await axios.get(
-                `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`,
-                {
-                  headers:{
-                    'x-cg-demo-api-key': process.env.COIN_API_KEY
-                  }
-                });
-                return response.data
-        }catch(err){
-            console.log('Deu errinho: '+err)
-        }
-}
-
 async function getChartInfos(coin){
         try{
             const response = await axios.get(
@@ -102,7 +87,7 @@ async function getAllCoinInfos(){
                                 }
                             }))
             
-                        const result = await CryptoData.bulkWrite(operations)
+                        await CryptoData.bulkWrite(operations)
                         return response.data
                     }catch(err){
                         console.log('Erro ao buscar informações das criptomoedas: '+err)
@@ -125,16 +110,6 @@ app.get('/coins',async (req,res)=>{
         return res.status(200).send(infos)
     }catch(err){
         return res.status(404).send({message: `Deu erro na busca: ${err}`})
-    }
-})
-
-app.get('/coins/:coin',async (req,res)=>{
-    const coin = req.params.coin
-    try{
-        const infos = await getCoinInfos(coin)
-        return res.status(200).send(infos)
-    }catch(err){
-        return res.status(404).send({message: err})
     }
 })
 

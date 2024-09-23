@@ -1,9 +1,11 @@
 import * as d3 from 'd3'
 import { useEffect, useState } from 'react'
-import { View, Dimensions } from 'react-native'
+import { View, Dimensions, TouchableOpacity, Text } from 'react-native'
 import {Svg, Path, Defs, LinearGradient, Stop} from 'react-native-svg'
 import axios from 'axios'
 import { LoadingComponent } from '../loadingComponent'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 type dataProps = [number, number][]
 
@@ -12,19 +14,51 @@ export function Graphic({coinId, days}:{coinId:string,days:number}){
   const [coinData, setCoinData] = useState<dataProps>([])
   const [dataPeriod, setDataPeriod] = useState<dataProps>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  useEffect(()=>{
-    async function getPrices(){
-      try{
-        const response = await axios.get(`http://192.168.15.116:3002/charts/${coinId}`)
-        setCoinData(response.data)
-        setDataPeriod(response.data.slice(0,180))
-        setIsLoading(false)
-      }catch(err){
-        console.log('Erro no gráfico: ',err)
-      }
+  
+  async function getPrices(){
+    try{
+      const response = await axios.get(`http://10.0.0.196:3002/charts/${coinId}`)
+
+      const graphicData = JSON.stringify(response.data)
+      await AsyncStorage.setItem(`@last_${coinId}_graphic_update`, String(Date.now()))
+      await AsyncStorage.setItem(`@Coin_${coinId}`, graphicData)
+      setCoinData(response.data)
+      setDataPeriod(response.data.slice(0,180))
+      setIsLoading(false)
+    }catch(err){
+      getCache()
+      console.log('Erro no gráfico: ',err)
     }
-    getPrices()
+  }
+
+  function oneHourPassed(last_update:string){
+    const oneHour = 60*60*1000
+    return (Date.now() - parseFloat(last_update)) >= oneHour? true:false 
+  }
+
+  async function getCache(){
+    const data = await AsyncStorage.getItem(`@Coin_${coinId}`)
+    if(data){
+      setCoinData(JSON.parse(data))
+      setDataPeriod(JSON.parse(data).slice(0,180))
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(()=>{
+    async function checkData() {
+      const existCache = await AsyncStorage.getItem(`@last_${coinId}_graphic_update`)
+      if(existCache){
+        if(oneHourPassed(existCache)){
+          return getPrices()
+        }
+        return getCache()
+      }
+      getPrices()
+    }
+    checkData()
   },[])
+
 
   useEffect(()=>{
     function changeGraph(){

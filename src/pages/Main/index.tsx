@@ -2,7 +2,7 @@ import { mainStyles } from "./styles"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Menu } from "../../components/Menu"
 import { Balance } from "../../components/Balance"
-import { Text, TouchableOpacity, View} from "react-native"
+import { View } from "react-native"
 import { History } from "../../components/Quotations"
 import { CryptoCard } from "../../components/Cards"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -24,7 +24,7 @@ export function MainPage({navigation, route}:navigatorProps){
 
     async function getInfos(){
         try{
-            const response = await axios.get(`http://10.0.0.196:3002/coins`)
+            const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/coins`)
             const dataString = JSON.stringify(response.data)
             await AsyncStorage.setItem('@Coins', dataString)
             await AsyncStorage.setItem('@last_update', String(Date.now()))

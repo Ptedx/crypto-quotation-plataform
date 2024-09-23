@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import { useEffect, useState } from 'react'
-import { View, Dimensions, TouchableOpacity, Text } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import {Svg, Path, Defs, LinearGradient, Stop} from 'react-native-svg'
 import axios from 'axios'
 import { LoadingComponent } from '../loadingComponent'
@@ -17,7 +17,7 @@ export function Graphic({coinId, days}:{coinId:string,days:number}){
   
   async function getPrices(){
     try{
-      const response = await axios.get(`http://10.0.0.196:3002/charts/${coinId}`)
+      const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/charts/${coinId}`)
 
       const graphicData = JSON.stringify(response.data)
       await AsyncStorage.setItem(`@last_${coinId}_graphic_update`, String(Date.now()))

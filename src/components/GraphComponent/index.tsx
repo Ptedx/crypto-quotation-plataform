@@ -5,12 +5,15 @@ import {Svg, Path, Defs, LinearGradient, Stop} from 'react-native-svg'
 import axios from 'axios'
 import { LoadingComponent } from '../loadingComponent'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-
 type dataProps = [number, number][]
 
+interface graphicProps{
+  coinId: string,
+  days: number,
+  changeModal: ()=>void
+}
 
-export function Graphic({coinId, days}:{coinId:string,days:number}){
+export function Graphic({coinId, days, changeModal}:graphicProps){
   const [coinData, setCoinData] = useState<dataProps>([])
   const [dataPeriod, setDataPeriod] = useState<dataProps>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -22,18 +25,20 @@ export function Graphic({coinId, days}:{coinId:string,days:number}){
       const graphicData = JSON.stringify(response.data)
       await AsyncStorage.setItem(`@last_${coinId}_graphic_update`, String(Date.now()))
       await AsyncStorage.setItem(`@Coin_${coinId}`, graphicData)
+      
       setCoinData(response.data)
       setDataPeriod(response.data.slice(0,180))
       setIsLoading(false)
     }catch(err){
       getCache()
+      changeModal()
       console.log('Erro no gráfico: ',err)
     }
   }
 
   function oneHourPassed(last_update:string){
-    const oneHour = 60*60*1000
-    return (Date.now() - parseFloat(last_update)) >= oneHour? true:false 
+    const fiveHours = 5*60*60*1000
+    return (Date.now() - parseFloat(last_update)) >= fiveHours? true:false 
   }
 
   async function getCache(){

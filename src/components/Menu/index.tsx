@@ -53,12 +53,12 @@ export function Menu({name, navigation}:menuProps & MenuProps){
                 </Modal>
 
                 <View>
-                    <Text style={priceStyles.text}>Boa Noite,</Text>
+                    <Text style={priceStyles.text}>Olá,</Text>
                     <Text style={priceStyles.title}>{name}!</Text>
                 </View>
                 <TouchableOpacity style={{width:50,height:50, borderRadius:50}} onPress={changeModalStatus}> 
                     <Image 
-                        source={require('../../img/Profile Photo.jpg')}
+                        source={require('../../img/avatar.png')}
                         style={{width:50, height: '100%', borderRadius:50}}
                     />
                 </TouchableOpacity>

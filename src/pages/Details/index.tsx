@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { LoadingComponent } from "../../components/loadingComponent";
 import { Item } from "../../components/Item";
 import { Graphic } from "../../components/GraphComponent";
+import { ErrorModal } from "../../components/ErrorModal";
 
 type navigationProps = NativeStackScreenProps<rootTypes, "Details">;
 
@@ -14,6 +15,12 @@ export function Details({ navigation, route }: navigationProps) {
   const { data } = route.params;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [period, setPeriod] = useState<number>(180);
+  const [isVisible, setVisible] = useState<boolean>(false)
+
+  function changeModalStatus(){
+      setVisible(!isVisible)
+  }
+
   useEffect(() => {
     async function getCoinInfos() {
       try {
@@ -30,15 +37,26 @@ export function Details({ navigation, route }: navigationProps) {
     getCoinInfos();
   }, []);
 
+  function truncate(number:number){
+    const num = number
+
+    if(num > -0.0001 && num < 0.0001){
+        return (num).toFixed(7)
+    }
+    if (num <= 1 && num >= -1){
+        return (num).toFixed(4)
+    }
+    return (num).toFixed(2)
+}
   const formatCurrency = (value: number | string) => {
     const numericValue = typeof value === "string" ? parseFloat(value) : value;
-
+    const valueChanged = Number(truncate(numericValue))
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 2,
-      maximumFractionDigits: 3,
-    }).format(numericValue);
+      maximumFractionDigits: 7,
+    }).format(valueChanged);
   };
 
   if (isLoading) {
@@ -47,20 +65,22 @@ export function Details({ navigation, route }: navigationProps) {
 
   return (
     <SafeAreaView style={detailStyles.contianer}>
+        <ErrorModal visible={isVisible} changeModalStatus={changeModalStatus}/>
+        
       <View style={detailStyles.infos}>
         <View style={detailStyles.price}>
           <Text style={detailStyles.title}>
-            {formatCurrency(data.current_price)}
+            {formatCurrency(truncate(data.current_price))}
           </Text>
           <Text
             style={
-              data.price_change_percentage_24h > 0
-                ? detailStyles.up
+              data.price_change_percentage_24h > 0? 
+                detailStyles.up
                 : detailStyles.down
             }
           >
-            {data.price_change_percentage_24h >= 0
-              ? `+${formatCurrency(
+            {data.price_change_percentage_24h >= 0?
+               `+${formatCurrency(
                   data.price_change_24h
                 )} (+${data.price_change_percentage_24h.toFixed(2)}%)`
               : `${formatCurrency(
@@ -74,7 +94,7 @@ export function Details({ navigation, route }: navigationProps) {
         />
       </View>
 
-      <Graphic coinId={data.id} days={period} />
+      <Graphic coinId={data.id} days={period} changeModal={changeModalStatus} />
 
       <View style={[detailStyles.buttons, { marginVertical: 10 }]}>
         <TouchableOpacity style={detailStyles.btn} onPress={() => setPeriod(7)}>
@@ -139,10 +159,17 @@ export function Details({ navigation, route }: navigationProps) {
           }
         />
 
-        <Item desc="Em circulação" data={data.circulating_supply.toFixed(0)} />
+        <Item desc="Em circulação" data={data.circulating_supply > 1e9?
+          `${(data.circulating_supply/1e9).toFixed(2)} B` 
+          :`${(data.circulating_supply/1e6).toFixed(2)} M`} 
+        />
+
         <Item
           desc="Quantidade Máxima"
-          data={data.max_supply ? data.max_supply.toFixed(0) : "N/A"}
+          data={data.max_supply ? data.max_supply > 1e9?
+          `${(data.max_supply/1e9).toFixed(2)} B`:
+          `${(data.max_supply/1e6).toFixed(2)} M` 
+          : "N/A"}
         />
 
         <Item desc="Ranking" data={data.market_cap_rank} />

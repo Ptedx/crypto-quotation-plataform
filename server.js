@@ -54,7 +54,7 @@ async function getAllCoinInfos(){
     if((now.getTime() - last_update[0].last_update.getTime()) >= fiveMinutes){
         try{
                         const response = await axios.get(
-                            'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&sparkline=true&precision=4',
+                            'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&sparkline=true&precision=7',
                             {
                               headers:{
                                 'x-cg-demo-api-key': process.env.COIN_API_KEY
@@ -86,7 +86,7 @@ async function getAllCoinInfos(){
                                     upsert: true
                                 }
                             }))
-            
+
                         await CryptoData.bulkWrite(operations)
                         return response.data
                     }catch(err){
@@ -109,7 +109,7 @@ app.get('/coins',async (req,res)=>{
         const infos = await getAllCoinInfos()
         return res.status(200).send(infos)
     }catch(err){
-        return res.status(404).send({message: `Deu erro na busca: ${err}`})
+        return res.status(404).send({message: `Deu erro na busca de todas as moedas: ${err}`})
     }
 })
 

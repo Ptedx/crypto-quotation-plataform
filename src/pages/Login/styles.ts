@@ -21,7 +21,7 @@ export const infoStyles = StyleSheet.create({
         borderRadius: 12,
         padding:15,
         paddingVertical: 20,
-        marginBottom: 20,
+        marginBottom: 10,
         color: 'white'
     },
     text:{

@@ -35,7 +35,7 @@ export const priceStyles = StyleSheet.create({
     },
     text:{
         color:'#FFFFFF',
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     title:{

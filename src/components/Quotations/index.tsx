@@ -10,16 +10,15 @@ type HistoryProps = {
 
 export function History({navigation, dataAPI}:HistoryProps){
 
-    function truncate(number:string){
-        const num = parseFloat(number)
+    function truncate(number:number){
 
-        if(num > -0.0001 && num < 0.0001){
-            return (num).toFixed(7)
+        if(number > -0.0001 && number < 0.0001){
+            return (number).toFixed(7)
         }
-        if (num <= 1 && num >= -1){
-            return (num).toFixed(4)
+        if (number <= 1 && number >= -1){
+            return (number).toFixed(4)
         }
-        return (num).toFixed(2)
+        return (number).toFixed(2)
     }
 
     return(

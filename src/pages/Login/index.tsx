@@ -8,6 +8,7 @@ import axios from "axios"
 import * as SecureStorage from 'expo-secure-store'
 import { CommonActions } from "@react-navigation/native"
 import { BottomBlur, TopBlur } from "../../components/background_blur"
+import { ErrorModal } from "../../components/ErrorModal"
 
 type navigationProps = NativeStackScreenProps<rootTypes, 'Login'>
 
@@ -15,7 +16,11 @@ export function Login({navigation}: navigationProps){
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('')
     const [isTouched, setIsTouched] = useState<boolean>(false)
-    
+    const [isVisible, setVisible] = useState<boolean>(false)
+
+    function changeModalStatus(){
+        setVisible(!isVisible)
+    }
 
     function resetFields(){
         setEmail('')
@@ -33,13 +38,14 @@ export function Login({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('https://crypto-quotation-plataform.onrender.com/login',{
+            const response = await axios.post('http://10.0.0.196:3002/login',{
                 email: email,
                 password: password
             });
             await SecureStorage.setItemAsync('AuthToken', JSON.stringify({token: response.data.token,name: response.data.name}))
             return response
         } catch (error) {
+            setVisible(true)
         }
     }
 
@@ -69,6 +75,8 @@ export function Login({navigation}: navigationProps){
 
     return(
         <View style={infoStyles.contianer}>
+                <ErrorModal visible={isVisible} changeModalStatus={changeModalStatus}/>
+
                 <BottomBlur />
                 <TopBlur />            
                 <ScrollView style={{width: '100%'}}>
@@ -107,7 +115,7 @@ export function Login({navigation}: navigationProps){
                             secureTextEntry={true}
                         /> 
                     
-                        <Btn content='LOGAR' action={validadeLogin} />
+                        <Btn content='LOGAR' action={validadeLogin} change={changeModalStatus}/>
 
                         <View style={{flexDirection:'row', marginTop: 40, marginBottom: 20}}>
                             <Text style={infoStyles.text}>

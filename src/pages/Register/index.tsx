@@ -8,6 +8,7 @@ import axios from "axios"
 import { CommonActions } from "@react-navigation/native"
 import { BottomBlur, TopBlur } from "../../components/background_blur"
 import * as SecureStorage from 'expo-secure-store'
+import { ErrorModal } from "../../components/ErrorModal"
 
 type navigationProps = NativeStackScreenProps<rootTypes, 'Register'>
 
@@ -16,6 +17,11 @@ export function Register({navigation}: navigationProps){
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('')
     const [isTouched, setIsTouched] = useState<boolean>(false)
+    const [isVisible, setVisible] = useState<boolean>(false)
+
+    function changeModalStatus(){
+        setVisible(!isVisible)
+    }
 
     function resetFields(){
         setName('')
@@ -34,7 +40,7 @@ export function Register({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('https://crypto-quotation-plataform.onrender.com/register', {
+            const response = await axios.post('http://10.0.0.196:3002/register', {
                 name: name,
                 email: email,
                 password: password,
@@ -74,6 +80,8 @@ export function Register({navigation}: navigationProps){
 
     return(
         <View style={[infoStyles.contianer,{marginTop:-30}]}>
+            <ErrorModal visible={isVisible} changeModalStatus={changeModalStatus}/>
+
             <BottomBlur />
             <TopBlur />
             <ScrollView style={{width: '100%'}}>
@@ -120,7 +128,7 @@ export function Register({navigation}: navigationProps){
                         onChange={(item)=>setPassword(item.nativeEvent.text)}
                         secureTextEntry={true}
                     />
-                    <Btn content='REGISTRAR' action={validadeLogin} />
+                    <Btn content='REGISTRAR' action={validadeLogin} change={changeModalStatus} />
 
                     <View style={{flexDirection:'row', marginTop: 20, marginBottom: 20}}>
                         <Text style={infoStyles.text}>

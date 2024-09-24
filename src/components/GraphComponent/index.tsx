@@ -20,7 +20,7 @@ export function Graphic({coinId, days, changeModal}:graphicProps){
   
   async function getPrices(){
     try{
-      const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/charts/${coinId}`)
+      const response = await axios.get(`http://10.0.0.196:3002/charts/${coinId}`)
 
       const graphicData = JSON.stringify(response.data)
       await AsyncStorage.setItem(`@last_${coinId}_graphic_update`, String(Date.now()))

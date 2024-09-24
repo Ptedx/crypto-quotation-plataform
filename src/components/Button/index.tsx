@@ -1,13 +1,16 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useNetwork } from "../../hooks/useNetwork";
 
 interface btnProps{
     content:string,
-    action: ()=>void
+    action: ()=>void,
+    change: ()=>void,
 }
 
-export function Btn({content, action}:btnProps){
+export function Btn({content, action, change}:btnProps){
+    const {isConnected} = useNetwork()
     return(
-        <TouchableOpacity style={btnStyles.btn} onPress={action}>
+        <TouchableOpacity style={btnStyles.btn} onPress={isConnected? action: change}>
             <Text style={btnStyles.text}>
                 {content}
             </Text>

@@ -1,17 +1,19 @@
-import { View, Text, Image, FlatList } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { cardStyles } from './styles';
 import { coinsData } from '../../models/cyptoInfos';
 import { Sparkline } from '../sparkline';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { rootTypes } from '../../types/types';
 
 interface CryptoData {
+    navigation: NativeStackNavigationProp<rootTypes, 'MainTabs'>
     dataApi:coinsData[]
   }
-export function CryptoCard({ dataApi }:CryptoData){
+export function CryptoCard({ navigation ,dataApi }:CryptoData){
     const topTrending = dataApi.slice(0,10)
 
-    function truncate(number:string){
-      const num = parseFloat(number)
-      return num < 1 && num > -1? (num).toFixed(4) : (num).toFixed(2)
+    function truncate(number:number){
+      return number < 1 && number > -1? (number).toFixed(4) : (number).toFixed(2)
     }
     return (
       <FlatList
@@ -19,8 +21,11 @@ export function CryptoCard({ dataApi }:CryptoData){
             keyExtractor={(item)=>item.symbol}
             horizontal
             renderItem={({item})=>(
-                    <View style={cardStyles.card}>
-                      
+                    <TouchableOpacity 
+                      style={cardStyles.card}
+                      onPress={()=>navigation.navigate('Details',
+                        {data: item})}
+                    >
                         <View style={cardStyles.currencyInfos}>
                           <View style={cardStyles.priceInfos}>
                             <Image 
@@ -33,7 +38,7 @@ export function CryptoCard({ dataApi }:CryptoData){
 
                             <View style={cardStyles.priceInfos}>
                               <Text style={cardStyles.price}>${truncate(item.current_price)}</Text>
-                                <Text style={[cardStyles.change, parseFloat(item.price_change_percentage_24h) > 0 ? 
+                                <Text style={[cardStyles.change,item.price_change_percentage_24h> 0 ? 
                                   cardStyles.positiveChange : cardStyles.negativeChange]}>
                                   {truncate(item.price_change_percentage_24h)}%
                               </Text> 
@@ -41,8 +46,7 @@ export function CryptoCard({ dataApi }:CryptoData){
 
                       </View>
                       <Sparkline dataAPI={item.sparkline_in_7d.price}/>
-
-                  </View>
+                  </TouchableOpacity>
 
             )}
       />

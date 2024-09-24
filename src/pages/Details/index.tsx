@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { LoadingComponent } from "../../components/loadingComponent";
 import { Item } from "../../components/Item";
 import { Graphic } from "../../components/GraphComponent";
-import { ErrorModal } from "../../components/ErrorModal";
+import { useNetwork } from "../../hooks/useNetwork";
+import { DisconnectedModal } from "../../components/DisconnectedModal";
 
 type navigationProps = NativeStackScreenProps<rootTypes, "Details">;
 
@@ -16,10 +17,17 @@ export function Details({ navigation, route }: navigationProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [period, setPeriod] = useState<number>(180);
   const [isVisible, setVisible] = useState<boolean>(false)
+  const isConnected = useNetwork()
 
   function changeModalStatus(){
-      setVisible(!isVisible)
+    setVisible(!isVisible)
   }
+  
+  useEffect(()=>{
+    if(!isConnected){
+      changeModalStatus()
+    }
+  },[isConnected])
 
   useEffect(() => {
     async function getCoinInfos() {
@@ -65,7 +73,7 @@ export function Details({ navigation, route }: navigationProps) {
 
   return (
     <SafeAreaView style={detailStyles.contianer}>
-        <ErrorModal visible={isVisible} changeModalStatus={changeModalStatus}/>
+        <DisconnectedModal visible={isVisible} changeModalStatus={changeModalStatus}/>
         
       <View style={detailStyles.infos}>
         <View style={detailStyles.price}>

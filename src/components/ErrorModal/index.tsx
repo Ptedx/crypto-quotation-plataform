@@ -34,7 +34,7 @@ export function ErrorModal({visible, changeModalStatus}: modalProps){
                             ERROR
                         </Text>
                         <Text style={errorModalStye.subTitle}>
-                            Sem conexão com a internet!
+                            Falha na conexão com o servidor
                         </Text>
                         <Text style={errorModalStye.text}>
                             Por favor verifique sua internet e tente novamente!

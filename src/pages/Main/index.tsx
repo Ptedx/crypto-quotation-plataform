@@ -13,7 +13,8 @@ import axios from "axios";
 import { CoinsData } from "../../models/cyptoInfos";
 import { LoadingComponent } from "../../components/loadingComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ErrorModal } from "../../components/ErrorModal";
+import { useNetwork } from "../../hooks/useNetwork";
+import { DisconnectedModal } from "../../components/DisconnectedModal";
 
 export type navigatorProps = NativeStackScreenProps<rootTypes, "MainTabs">;
 
@@ -22,24 +23,29 @@ export function MainPage({ navigation, route }: navigatorProps) {
   const [data, setData] = useState<CoinsData | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [isVisible, setVisible] = useState<boolean>(false);
+  const isConnected = useNetwork()
 
-    function changeModalStatus(){
-        setVisible(!isVisible)
+  function changeModalStatus(){
+    setVisible(!isVisible)
+  }
+
+  useEffect(()=>{
+    if(!isConnected){
+      changeModalStatus()
     }
+  },[isConnected])
 
   async function getInfos() {
     try {
-      const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/coins`)
+      const response = await axios.get(`http://10.0.0.196:3002/coins`)
       const dataString = JSON.stringify(response.data)
       await AsyncStorage.setItem("@Coins", dataString)
       await AsyncStorage.setItem("@last_update", String(Date.now()));
 
       setData(response.data)
       setLoaded(true);
-    } catch (err) {
+    } catch{
       getCache()
-      changeModalStatus()
-      console.log("Erro ao buscar moedas: ", err)
     }
   }
 
@@ -79,12 +85,12 @@ export function MainPage({ navigation, route }: navigatorProps) {
     <SafeAreaView style={mainStyles.contianer}>
 
       <View style={mainStyles.contianer}>
-        <ErrorModal visible={isVisible} changeModalStatus={changeModalStatus}/>
+        <DisconnectedModal visible={isVisible} changeModalStatus={changeModalStatus}/>
 
         <TopBlur />
         <Menu navigation={navigation} name={name!} />
         <Balance />
-        <CryptoCard dataApi={data!} />
+        <CryptoCard navigation={navigation} dataApi={data!} />
       </View>
       <History navigation={navigation} dataAPI={data!} />
     </SafeAreaView>

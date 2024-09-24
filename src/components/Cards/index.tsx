@@ -4,11 +4,11 @@ import { coinsData } from '../../models/cyptoInfos';
 import { Sparkline } from '../sparkline';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { rootTypes } from '../../types/types';
-
 interface CryptoData {
     navigation: NativeStackNavigationProp<rootTypes, 'MainTabs'>
     dataApi:coinsData[]
-  }
+}
+
 export function CryptoCard({ navigation ,dataApi }:CryptoData){
     const topTrending = dataApi.slice(0,10)
 

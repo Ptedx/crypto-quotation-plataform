@@ -2,10 +2,11 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, } from "reac
 import { histStyles } from "./styles"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { rootTypes } from "../../types/types";
+import { coinsData } from "../../models/cyptoInfos";
 
-type HistoryProps = {
+interface HistoryProps {
     navigation: NativeStackNavigationProp<rootTypes, 'MainTabs'>
-    dataAPI: any
+    dataAPI:coinsData[]
   };
 
 export function History({navigation, dataAPI}:HistoryProps){

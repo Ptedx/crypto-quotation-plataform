@@ -37,7 +37,7 @@ export function MainPage({ navigation, route }: navigatorProps) {
 
   async function getInfos() {
     try {
-      const response = await axios.get(`http://10.0.0.196:3002/coins`)
+      const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/coins`)
       const dataString = JSON.stringify(response.data)
       await AsyncStorage.setItem("@Coins", dataString)
       await AsyncStorage.setItem("@last_update", String(Date.now()));

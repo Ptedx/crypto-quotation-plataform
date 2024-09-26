@@ -9,6 +9,7 @@ import * as SecureStorage from 'expo-secure-store'
 import { CommonActions } from "@react-navigation/native"
 import { BottomBlur, TopBlur } from "../../components/background_blur"
 import { ErrorModal } from "../../components/ErrorModal"
+import { hp, wp } from "../../components/Responsive"
 
 type navigationProps = NativeStackScreenProps<rootTypes, 'Login'>
 
@@ -38,14 +39,14 @@ export function Login({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('https://crypto-quotation-plataform.onrender.com/login',{
+            const response = await axios.post('http://192.168.15.116:3002/login',{
                 email: email,
                 password: password
             });
             await SecureStorage.setItemAsync('AuthToken', JSON.stringify({token: response.data.token,name: response.data.name}))
             return response
         } catch (error) {
-            setVisible(true)
+            console.log(error)
         }
     }
 
@@ -79,21 +80,21 @@ export function Login({navigation}: navigationProps){
 
                 <BottomBlur />
                 <TopBlur />            
-                <ScrollView style={{width: '100%'}}>
+                <ScrollView style={{width: wp(100)}}>
                     <View style={infoStyles.loginArea}>
                         <Image 
                             source={require('../../img/allcoins_main.png')}
                             resizeMode="contain"
-                            style={{width: 200, height:200,marginVertical: 20}}
+                            style={{height:hp(25),marginVertical: hp(3)}}
                         />
                         <Text style={StyleSheet.compose(infoStyles.text, infoStyles.title)}>
                             Bem vindo de volta!
                         </Text>
-                        <Text style={StyleSheet.compose(infoStyles.text,{marginBottom: 20})}>
+                        <Text style={[infoStyles.text,infoStyles.subtitle]}>
                             Preencha os campos para logar
                         </Text>
 
-                        <Text style={{color:'red', width: '100%', paddingHorizontal:40}}>
+                        <Text style={infoStyles.errorText}>
                             {!email && isTouched? 'Campo Obrigatório':''}
                         </Text>
                         <TextInput 
@@ -103,7 +104,7 @@ export function Login({navigation}: navigationProps){
                             value={email}
                             onChange={(item)=>setEmail(item.nativeEvent.text)}
                         />
-                        <Text style={{color:'red', width: '100%', paddingHorizontal:40}}>
+                        <Text style={infoStyles.errorText}>
                             {!password && isTouched? 'Campo Obrigatório':''}
                         </Text>
                         <TextInput 
@@ -117,8 +118,8 @@ export function Login({navigation}: navigationProps){
                     
                         <Btn content='LOGAR' action={validadeLogin} change={changeModalStatus}/>
 
-                        <View style={{flexDirection:'row', marginTop: 40, marginBottom: 20}}>
-                            <Text style={infoStyles.text}>
+                        <View style={{flexDirection:'row', marginTop: hp(5), marginBottom: 20}}>
+                            <Text style={[infoStyles.text]}>
                                 Não possui uma conta ainda?
                             </Text>
                             <TouchableOpacity onPress={()=>goRegister()}>

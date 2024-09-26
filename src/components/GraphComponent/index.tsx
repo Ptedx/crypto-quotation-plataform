@@ -5,6 +5,7 @@ import {Svg, Path, Defs, LinearGradient, Stop} from 'react-native-svg'
 import axios from 'axios'
 import { LoadingComponent } from '../loadingComponent'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { hp, wp } from '../Responsive'
 type dataProps = [number, number][]
 
 interface graphicProps{
@@ -20,7 +21,7 @@ export function Graphic({coinId, days, changeModal}:graphicProps){
   
   async function getPrices(){
     try{
-      const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/charts/${coinId}`)
+      const response = await axios.get(`http://192.168.15.116:3002/charts/${coinId}`)
 
       const graphicData = JSON.stringify(response.data)
       await AsyncStorage.setItem(`@last_${coinId}_graphic_update`, String(Date.now()))
@@ -73,8 +74,8 @@ export function Graphic({coinId, days, changeModal}:graphicProps){
     changeGraph()
   },[days])
 
-  const { width: screenWidth } = Dimensions.get('window');
-  const height:number = 300 
+  const screenWidth:number = wp(95)
+  const height:number = hp(35)
 
   const xMin: Date | undefined = d3.min(dataPeriod, (d) => new Date(d[0]))
   const xMax: Date | undefined = d3.max(dataPeriod, (d) => new Date(d[0]))

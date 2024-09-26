@@ -4,8 +4,6 @@ export const mainStyles = StyleSheet.create({
     contianer:{
         flex: 1,
         backgroundColor: '#0e0e0e',
-        alignItems: 'center',
-        justifyContent: 'center',
         width:'100%',
         position:'relative',
     },

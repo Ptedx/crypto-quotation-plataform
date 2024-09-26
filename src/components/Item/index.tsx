@@ -1,4 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { hp, wp } from "../Responsive";
 
 interface btnProps{
     desc:string,
@@ -34,7 +35,7 @@ const btnStyles= StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         marginBottom: 10,
-        height: 70,
+        height: hp(8),
         justifyContent: 'space-between',
         alignItems:'center',
         padding: 10,
@@ -42,7 +43,7 @@ const btnStyles= StyleSheet.create({
     },
     text:{
         color:'#FFFFFF',
-        fontSize:18,
+        fontSize:wp(4),
         fontWeight: 'bold',
         textAlign: 'center',
     },

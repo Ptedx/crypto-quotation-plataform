@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native"
+import { hp, wp } from "../../components/Responsive"
 
 export const infoStyles = StyleSheet.create({
     contianer:{
@@ -9,29 +10,39 @@ export const infoStyles = StyleSheet.create({
         position:'relative',
     },
     loginArea:{
-        width: '100%',
+        width: wp(100),
         flex:1,
-        marginTop: 150,
+        marginTop: hp(10),
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
     input:{
         backgroundColor: '#333333',
-        width: '80%',
+        width: wp(80),
         borderRadius: 12,
-        padding:15,
-        paddingVertical: 20,
+        padding:wp(5),
+        paddingVertical: wp(3),
         marginBottom: 10,
         color: 'white'
     },
     text:{
         color:'#B0B0B0',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: wp(3.5),
+    },
+    errorText:{
+        color:'red', 
+        width: '100%', 
+        paddingHorizontal:wp(12)
     },
     title:{
-        marginBottom: 5,
-        fontSize:30,
+        marginBottom: hp(1),
+        fontSize: wp(7),
         color:'#FFFFFF',
+    },
+    subtitle:{
+        fontSize: wp(4),
+        marginBottom: hp(3)
     }
+    
 })

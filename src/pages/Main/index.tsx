@@ -2,7 +2,7 @@ import { mainStyles } from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Menu } from "../../components/Menu";
 import { Balance } from "../../components/Balance";
-import { TouchableOpacity, View, Text } from "react-native";
+import { View } from "react-native";
 import { History } from "../../components/Quotations";
 import { CryptoCard } from "../../components/Cards";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -23,7 +23,7 @@ export function MainPage({ navigation, route }: navigatorProps) {
   const [data, setData] = useState<CoinsData | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [isVisible, setVisible] = useState<boolean>(false);
-  const isConnected = useNetwork()
+  const {isConnected} = useNetwork()
 
   function changeModalStatus(){
     setVisible(!isVisible)
@@ -31,13 +31,15 @@ export function MainPage({ navigation, route }: navigatorProps) {
 
   useEffect(()=>{
     if(!isConnected){
-      changeModalStatus()
+      setVisible(true)
+    }else{
+      setVisible(false)
     }
   },[isConnected])
 
   async function getInfos() {
     try {
-      const response = await axios.get(`https://crypto-quotation-plataform.onrender.com/coins`)
+      const response = await axios.get(`http://192.168.15.116:3002/coins`)
       const dataString = JSON.stringify(response.data)
       await AsyncStorage.setItem("@Coins", dataString)
       await AsyncStorage.setItem("@last_update", String(Date.now()));
@@ -82,7 +84,7 @@ export function MainPage({ navigation, route }: navigatorProps) {
   }
 
   return (
-    <SafeAreaView style={mainStyles.contianer}>
+    <SafeAreaView style={mainStyles.scroll}>
 
       <View style={mainStyles.contianer}>
         <DisconnectedModal visible={isVisible} changeModalStatus={changeModalStatus}/>
@@ -91,8 +93,8 @@ export function MainPage({ navigation, route }: navigatorProps) {
         <Menu navigation={navigation} name={name!} />
         <Balance />
         <CryptoCard navigation={navigation} dataApi={data!} />
+        <History navigation={navigation} dataAPI={data!} />
       </View>
-      <History navigation={navigation} dataAPI={data!} />
     </SafeAreaView>
   );
 }

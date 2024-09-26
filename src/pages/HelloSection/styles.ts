@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native"
+import { hp, wp } from "../../components/Responsive"
 
 
 export const contactStyles = StyleSheet.create({
@@ -11,7 +12,15 @@ export const contactStyles = StyleSheet.create({
     },
     img:{
         width: '100%',
-        marginTop:10
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    textDiv:{
+        width:wp(100),
+        paddingTop:hp(10),
+        flex:1,
+        alignItems:'center',
     },
     bottom_square:{
         width:500,
@@ -30,20 +39,21 @@ export const contactStyles = StyleSheet.create({
     title:{
         color:'#FFFFFF',
         textAlign:'center',
-        fontSize:44,
+        fontSize:hp(5),
         marginTop: -30,
         marginBottom: 20,
         fontWeight: 'bold',
     },
     text:{
         color:'#B0B0B0',
-        fontSize:16,
+        fontSize:hp(1.7),
         fontWeight: 'bold',
     },
     btn:{
         backgroundColor:'#000000',
+        width:wp(80),
         borderRadius: 16,
-        marginTop: 60,
+        marginTop: hp(10),
         marginBottom: 20,
         flexDirection:'row',
         alignItems: 'center',

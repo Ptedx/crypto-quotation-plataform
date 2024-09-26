@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native"
+import { hp, wp } from "../../components/Responsive"
 
 export const detailStyles = StyleSheet.create({
     contianer:{
@@ -21,7 +22,7 @@ export const detailStyles = StyleSheet.create({
     text:{
         color:'#B0B0B0',
         fontWeight: 'bold',
-        fontSize: 18
+        fontSize: hp(2)
     },
     up:{
         color:'#32CD32',
@@ -34,16 +35,19 @@ export const detailStyles = StyleSheet.create({
         paddingHorizontal:20,
     },
     title:{
-        fontSize: 40,
+        fontSize: wp(7),
         color: 'white',
         fontWeight: 'bold',
     },
     graphic:{
-        marginBottom: 20
+        marginBottom: 20,
+        justifyContent:'center',
+        alignItems:'center',
     },
     buttons:{
         flexDirection:'row',
-        justifyContent:'space-around',
+        justifyContent:'space-evenly',
+        width:wp(80),
         gap:50,
         marginBottom:10,
     },

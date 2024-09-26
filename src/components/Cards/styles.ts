@@ -1,19 +1,24 @@
 import { StyleSheet } from "react-native"
+import { hp } from "../Responsive";
 
 export const cardStyles = StyleSheet.create({
     // Estilos para cada elemento do card
-    card: {
+    container:{
+      height:hp(20),
+      marginBottom:hp(2),
+    }
+    ,card: {
       alignItems: 'center',
       gap:20,
-      paddingHorizontal: 20,
+      paddingHorizontal: hp(2),
       width: 300,
-      marginBottom: 10,
       backgroundColor: '#1e1e1e',
       borderRadius: 10,
+      height:hp(18.5),
       marginHorizontal: 10,
     },
     currencyInfos:{
-        marginTop: 20,
+        paddingTop:hp(2),
         flexDirection:'row',
         gap: 12,
         justifyContent: 'space-between',

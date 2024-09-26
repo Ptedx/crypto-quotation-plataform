@@ -9,6 +9,7 @@ import { CommonActions } from "@react-navigation/native"
 import { BottomBlur, TopBlur } from "../../components/background_blur"
 import * as SecureStorage from 'expo-secure-store'
 import { ErrorModal } from "../../components/ErrorModal"
+import { hp, wp } from "../../components/Responsive"
 
 type navigationProps = NativeStackScreenProps<rootTypes, 'Register'>
 
@@ -40,7 +41,7 @@ export function Register({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('https://crypto-quotation-plataform.onrender.com/register', {
+            const response = await axios.post('http://192.168.15.116:3002/register', {
                 name: name,
                 email: email,
                 password: password,
@@ -52,6 +53,7 @@ export function Register({navigation}: navigationProps){
             }
             return response.data.message
         } catch (error) {
+            console.log(error)
         }
     }
 
@@ -84,20 +86,20 @@ export function Register({navigation}: navigationProps){
 
             <BottomBlur />
             <TopBlur />
-            <ScrollView style={{width: '100%'}}>
+            <ScrollView style={{width: wp(100)}}>
                 <View style={infoStyles.loginArea}>
                     <Image 
                         source={require('../../img/allcoins_main.png')}
                         resizeMode="contain"
-                        style={{width: 200, height:200,marginVertical: 20}}
+                        style={{height: hp(25), marginTop: hp(3)}}
                     />
                     <Text style={StyleSheet.compose(infoStyles.text, infoStyles.title)}>
                         JUNTE-SE À ALL COINS
                     </Text>
-                    <Text style={infoStyles.text}>
+                    <Text style={[infoStyles.text, infoStyles.subtitle]}>
                         Preencha os campos para registrar-se
                     </Text>
-                    <Text style={{color:'red', width: '100%', paddingHorizontal:40}}>
+                    <Text style={infoStyles.errorText}>
                         {!name && isTouched? 'Campo Obrigatório':''}
                     </Text>
                     <TextInput 
@@ -107,7 +109,7 @@ export function Register({navigation}: navigationProps){
                         value={name}
                         onChange={(item)=>setName(item.nativeEvent.text)}
                     />
-                    <Text style={{color:'red', width: '100%', paddingHorizontal:40}}>
+                    <Text style={infoStyles.errorText}>
                         {!email && isTouched? 'Campo Obrigatório':''}
                     </Text>
                     <TextInput 
@@ -117,7 +119,7 @@ export function Register({navigation}: navigationProps){
                         value={email}
                         onChange={(item)=>setEmail(item.nativeEvent.text)}
                     />
-                    <Text style={{color:'red', width: '100%', paddingHorizontal:40}}>
+                    <Text style={infoStyles.errorText}>
                         {!password && isTouched? 'Campo Obrigatório':''}
                     </Text>
                     <TextInput 
@@ -130,7 +132,7 @@ export function Register({navigation}: navigationProps){
                     />
                     <Btn content='REGISTRAR' action={validadeLogin} change={changeModalStatus} />
 
-                    <View style={{flexDirection:'row', marginTop: 20, marginBottom: 20}}>
+                    <View style={{flexDirection:'row', marginTop: hp(2), marginBottom: 20}}>
                         <Text style={infoStyles.text}>
                             Já possui uma conta?
                         </Text>

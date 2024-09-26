@@ -9,6 +9,7 @@ import { Item } from "../../components/Item";
 import { Graphic } from "../../components/GraphComponent";
 import { useNetwork } from "../../hooks/useNetwork";
 import { DisconnectedModal } from "../../components/DisconnectedModal";
+import { hp, wp } from "../../components/Responsive";
 
 type navigationProps = NativeStackScreenProps<rootTypes, "Details">;
 
@@ -17,7 +18,7 @@ export function Details({ navigation, route }: navigationProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [period, setPeriod] = useState<number>(180);
   const [isVisible, setVisible] = useState<boolean>(false)
-  const isConnected = useNetwork()
+  const {isConnected} = useNetwork()
 
   function changeModalStatus(){
     setVisible(!isVisible)
@@ -25,7 +26,9 @@ export function Details({ navigation, route }: navigationProps) {
   
   useEffect(()=>{
     if(!isConnected){
-      changeModalStatus()
+      setVisible(true)
+    }else{
+      setVisible(false)
     }
   },[isConnected])
 
@@ -78,7 +81,7 @@ export function Details({ navigation, route }: navigationProps) {
       <View style={detailStyles.infos}>
         <View style={detailStyles.price}>
           <Text style={detailStyles.title}>
-            {formatCurrency(truncate(data.current_price))}
+            {formatCurrency(data.current_price)}
           </Text>
           <Text
             style={
@@ -131,7 +134,7 @@ export function Details({ navigation, route }: navigationProps) {
       <Text
         style={[
           detailStyles.title,
-          { textAlign: "center", marginVertical: 10, fontSize: 18 },
+          { textAlign: "center", marginVertical: hp(3), fontSize:wp(4)},
         ]}
       >
         MAIS INFORMAÇÕES

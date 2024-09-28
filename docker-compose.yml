@@ -1,0 +1,7 @@
+version: '1.0'
+
+services:
+  backend:
+    image: vinicosta37/allcoins_backend:1.0
+    ports:
+      - "3002:3002"

@@ -39,7 +39,7 @@ export function MainPage({ navigation, route }: navigatorProps) {
 
   async function getInfos() {
     try {
-      const response = await axios.get(`http://192.168.15.116:3002/coins`)
+      const response = await axios.get(`http://ec2-18-229-133-151.sa-east-1.compute.amazonaws.com/coins`)
       const dataString = JSON.stringify(response.data)
       await AsyncStorage.setItem("@Coins", dataString)
       await AsyncStorage.setItem("@last_update", String(Date.now()));

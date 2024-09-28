@@ -21,7 +21,7 @@ export function Graphic({coinId, days, changeModal}:graphicProps){
   
   async function getPrices(){
     try{
-      const response = await axios.get(`http://192.168.15.116:3002/charts/${coinId}`)
+      const response = await axios.get(`http://ec2-18-229-133-151.sa-east-1.compute.amazonaws.com/charts/${coinId}`)
 
       const graphicData = JSON.stringify(response.data)
       await AsyncStorage.setItem(`@last_${coinId}_graphic_update`, String(Date.now()))

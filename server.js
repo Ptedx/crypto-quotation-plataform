@@ -8,11 +8,17 @@ const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const { CryptoData } = require('./src/models/cyptoInfos');
+const cors = require('cors')
 
 
 const app = express()
 app.use(bodyParser.json())
 const httpServer = http.createServer(app)
+
+app.use(cors({
+    origin:'*',
+    methods:['GET','POST']
+}))
 
 const mongoConnection = async ()=>{
     try{

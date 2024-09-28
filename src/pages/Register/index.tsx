@@ -41,7 +41,7 @@ export function Register({navigation}: navigationProps){
 
     async function sendText() {
         try {
-            const response = await axios.post('http://192.168.15.116:3002/register', {
+            const response = await axios.post('http://ec2-18-229-133-151.sa-east-1.compute.amazonaws.com/register', {
                 name: name,
                 email: email,
                 password: password,

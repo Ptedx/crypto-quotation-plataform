@@ -1,16 +1,16 @@
-const express = require('express');
-const http = require('http');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-require('dotenv/config');
-const User = require('./src/models/user');
-const bycrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const axios = require('axios');
-const { CryptoData } = require('./src/models/cyptoInfos');
-const cors = require('cors')
+import express,{Request, Response} from 'express';
+import http from 'http';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv'
+import User from '../models/user';
+import bycrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import axios from 'axios';
+import { coinsData, CryptoData } from '../models/cyptoInfos';
+import cors from 'cors'
 
-
+dotenv.config()
 const app = express()
 app.use(bodyParser.json())
 const httpServer = http.createServer(app)
@@ -22,23 +22,25 @@ app.use(cors({
 
 const mongoConnection = async ()=>{
     try{
-        await mongoose.connect(process.env.DB_URL)
-        console.log('Servidor MongoDB conectado com sucesso!')
+        if(process.env.DB_URL){
+            await mongoose.connect(process.env.DB_URL)
+            console.log('Servidor MongoDB conectado com sucesso!')
+        }
     }catch(error){
         console.log('Deu erro: ',error)
     }
 }
 
-async function hashPassword(password){
+async function hashPassword(password:string){
     const salt = await bycrypt.genSalt(10)
     return bycrypt.hash(password, salt)    
 }
 
-async function comparePasswords(password, hashedPassword){
+async function comparePasswords(password:string, hashedPassword:string){
     return bycrypt.compare(password, hashedPassword)
 }
 
-async function getChartInfos(coin){
+async function getChartInfos(coin:string){
         try{
             const response = await axios.get(
                 `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=180&interval=daily&precision=6`,
@@ -66,7 +68,7 @@ async function getAllCoinInfos(){
                                 'x-cg-demo-api-key': process.env.COIN_API_KEY
                               }
                             });
-                            const operations = response.data.map(item => ({
+                            const operations = response.data.map((item:coinsData) => ({
                                 updateOne: {
                                     filter: { symbol: item.symbol },
                                     update: {
@@ -110,40 +112,42 @@ async function getAllCoinInfos(){
 }
 
 //Routes
-app.get('/coins',async (req,res)=>{
-    try{
-        const infos = await getAllCoinInfos()
-        return res.status(200).send(infos)
-    }catch(err){
-        return res.status(404).send({message: `Deu erro na busca de todas as moedas: ${err}`})
+app.get('/coins', async (req: Request , res:Response) => {
+    try {
+        const infos = await getAllCoinInfos();
+        res.status(200).send(infos)
+    } catch (err) {
+        res.status(404).send({message: 'Error: Falha ao buscar as cotações das moedas'})
     }
-})
+});
 
-app.get('/charts/:coin',async (req,res)=>{
+app.get('/charts/:coin',async (req: Request ,res: Response)=>{
     const coin = req.params.coin
     try{
         const infos = await getChartInfos(coin)
-        return res.status(200).send(infos)
+        res.status(200).send(infos)
     }catch(err){
-        return res.status(404).send({message: err})
+        res.status(404).send({message: err})
     }
 })
 
-app.post('/login', async (req, res)=>{
+app.post('/login', async (req: Request, res:Response)=>{
     const {email, password} = req.body
     const user = await User.findOne({email})
-    const auth = await comparePasswords(password, user.password)
+    const auth = await comparePasswords(password, user!.password)
     if(user){
         if(auth){
-            const token = jwt.sign({id: user.email, name: user.name},process.env.API_KEY)
-            return res.status(200).json({message: 'Usuário Logado!', token: token, name: user.name})
+            const token = jwt.sign({id: user.email, name: user.name},process.env.API_KEY!)
+            res.status(200).json({message: 'Usuário Logado!', token: token, name: user.name})
+        }else{
+            res.status(401).json({message: 'Usuário e/ou Senha incorretos'})
         }
-        return res.status(401).json({message: 'Usuário e/ou Senha incorretos'})
+    }else{
+        res.status(404).json({message: 'Usuário não encontrado!'})
     }
-    return res.status(404).json({message: 'Usuário não encontrado!'})
 })
 
-app.post('/register',async (req, res)=>{
+app.post('/register',async (req:Request, res:Response)=>{
     const {email, password,name} = req.body
     try{
         const user = new User(req.body)
@@ -151,10 +155,10 @@ app.post('/register',async (req, res)=>{
         if(!userFind){
             user.password = await hashPassword(password)
             await user.save()
-            const token = jwt.sign({id: email, name: name},process.env.API_KEY)
-            return res.status(201).json({message:'Usuário salvo com sucesso!', token: token})
+            const token = jwt.sign({id: email, name: name},process.env.API_KEY!)
+            res.status(201).json({message:'Usuário salvo com sucesso!', token: token})
         }else{
-            return res.status(401).json({message: 'Erro: Usuário já cadastrado'})
+            res.status(401).json({message: 'Erro: Usuário já cadastrado'})
         }
 
     }catch(error){
